@@ -19,40 +19,41 @@ class Home extends React.Component {
     navigation.navigate('Contact List');
   }
 
-    render() {
-        if (!this.state.isReady) {
-            return (
-                <AppLoading
-                    startAsync={this._cacheResourcesAsync}
-                    onFinish={() => this.setState({ isReady: true })}
-                    onError={console.warn}
-                />
-            );
-        }
+  render() {
+      if (!this.state.isReady) {
+          return (
+              <AppLoading
+                  startAsync={this._cacheResourcesAsync}
+                  onFinish={() => this.setState({ isReady: true })}
+                  onError={console.warn}
+              />
+          );
+      }
 
-        return (
-          <View style={styles.container}>
-            <Text>The Home Screen</Text>
-            <TouchableOpacity onPress={this.goToAddContacts}>
-              <View>
-                <Ionicons name="ios-person-add" size={144} color="black" />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.helpButton}>
-              <Text>SOS</Text>
-            </TouchableOpacity>
-          </View>
-        )
-    }
+      return (
+        <View style={styles.container}>
+          <Text>Add your emergency contacts below</Text>
+          <TouchableOpacity onPress={this.goToAddContacts}>
+            <View>
+              <Ionicons name="ios-person-add" size={144} color="black" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.helpButton}>
+            <Text>SOS</Text>
+          </TouchableOpacity>
+        </View>
+      )
+  }
 
-    async _cacheResourcesAsync() {
-        const images = [require('../../assets/splash2.jpeg')];
+  async _cacheResourcesAsync() {
+      const images = [require('../../assets/splash2.jpeg')];
 
-        const cacheImages = images.map(image => {
-            return Asset.fromModule(image).downloadAsync();
-        });
-        return Promise.all(cacheImages);
-    }
+      const cacheImages = images.map(image => {
+          return Asset.fromModule(image).downloadAsync();
+      });
+      return Promise.all(cacheImages);
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -63,11 +64,13 @@ const styles = StyleSheet.create({
   },
   helpButton: {
     backgroundColor: "lightblue",
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 200,
+    height: 200,
+    borderRadius: 200,
     alignItems: "center",
     justifyContent: 'center',
+    position: 'absolute',
+    bottom:0,
   },
 }); 
 
