@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, View, StyleSheet, FlatList, Text } from 'react-native';
 import * as Contacts from 'expo-contacts';
+import { Ionicons } from '@expo/vector-icons'; 
+import CheckBox from '@react-native-community/checkbox';
 import {keyExtractor} from '../../utils';
 // TODO: figure out name formatting
 // TODO: style this page
@@ -26,9 +28,13 @@ class ContactList extends React.Component {
   }
 
   renderItem = ({item}) => (
-    <View>
-      <Text>{item.firstName || item.name}</Text>
-      {item.phoneNumbers && <Text>{item.phoneNumbers[0].number}</Text>}
+    <View style={styles.contactsContainer}>
+      <CheckBox />
+      <Ionicons name="person-circle-sharp" style={{padding: 10}} size={24} color="black" />
+      <View style={styles.contactDetails}>
+        <Text>{item.firstName || item.name}</Text>
+        {item.phoneNumbers && <Text>{item.phoneNumbers[0].number}</Text>}
+      </View>
     </View>
   )
 
@@ -38,6 +44,7 @@ class ContactList extends React.Component {
       <SafeAreaView style={styles.container}>
         <Text>Contacts Module Example</Text>
         <FlatList
+          // numColumns={2}
           data={contacts}
           renderItem={this.renderItem}
           keyExtractor={keyExtractor}
@@ -50,6 +57,11 @@ class ContactList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     'flex': 1,
+  },
+  contactsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 10,
   },
 }); 
 
