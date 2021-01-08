@@ -35,9 +35,13 @@ class Home extends React.Component {
           SendSMS.send({
             body: `Hi ${name}, I'm testing the sos app`,
             recipients: [phoneNumber],
-            successTypes: ['sent'],
+            successTypes: ['sent', 'queued'],
+            allowAndroidSendWithoutReadPermission: true
           },
           (completed,cancelled,error) => {
+            if (cancelled) {
+              console.log('is cancelled lol')
+            }
             if (error) {
               console.log(error)
             }
