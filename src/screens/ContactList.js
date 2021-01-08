@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, TouchableOpacity, View, StyleSheet, FlatList, Text } from 'react-native';
+
 import * as Contacts from 'expo-contacts';
 import { Ionicons } from '@expo/vector-icons'; 
 import CheckBox from '@react-native-community/checkbox';
-import {keyExtractor} from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const { Set } = require('immutable');
+import { keyExtractor, retrieveEmergencyContacts, saveEmergencyContacts } from '../../utils';
+
+const { Map } = require('immutable');
+
 // TODO: figure out name formatting
 // TODO: style this page
 // TODO: figure out how to select emergency contacts
@@ -14,18 +18,19 @@ class ContactList extends React.Component {
     super(props);
     this.state = {
       contacts: [],
-      selectedContacts: Set(),
+      selectedContacts: Map(),
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status === 'granted') {
         const { data: contacts } = await Contacts.getContactsAsync({
           fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
         });
-        this.setState({contacts});
+        const selectedContacts = await retrieveEmergencyContacts();
+        this.setState({selectedContacts, contacts});
       }
     })();
   }
@@ -33,10 +38,10 @@ class ContactList extends React.Component {
   renderItem = ({item}) => (
     <View style={styles.contactsContainer}>
       <CheckBox 
-        value={Boolean(this.state.selectedContacts.has(item.id))}
+        value={this.state.selectedContacts.has(item.id)}
         onChange={() => {
           this.setState(() => ({
-            selectedContacts: this.state.selectedContacts.has(item.id) ? this.state.selectedContacts.remove(item.id) : this.state.selectedContacts.add(item.id)
+            selectedContacts: this.state.selectedContacts.has(item.id) ? this.state.selectedContacts.remove(item.id) : this.state.selectedContacts.set(item.id, item)
           }));
         }} />
       <Ionicons name="person-circle-sharp" style={styles.contactAvatar} size={24} color="black" />
@@ -46,6 +51,10 @@ class ContactList extends React.Component {
       </View>
     </View>
   )
+
+  storeEmergencyContacts = async () => {
+    await saveEmergencyContacts(this.state.selectedContacts);
+  }
 
   render() {
     const { contacts } = this.state;
@@ -59,6 +68,7 @@ class ContactList extends React.Component {
         />
         <TouchableOpacity
           style={styles.button}
+          onPress={this.storeEmergencyContacts}
         >
           <Text>Submit</Text>
         </TouchableOpacity>
