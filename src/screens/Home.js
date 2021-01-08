@@ -4,8 +4,7 @@ import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons';
 
-// TODO: style this page
-// TODO: figure out how to add an SOS button
+// TODO: figure out why splash screen is not showing. Apploading works so it's probably the issue with splash2.jpeg?
 class Home extends React.Component {
   constructor(props) {
     super(props);
