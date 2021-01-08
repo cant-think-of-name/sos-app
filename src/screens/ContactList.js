@@ -13,6 +13,7 @@ const { Map } = require('immutable');
 // TODO: figure out name formatting
 // TODO: style this page
 // TODO: figure out how to select emergency contacts
+// TODO: add error messages when saving fails (maybe as a toast)?
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
