@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, TouchableOpacity, View, StyleSheet, FlatList, Text } from 'react-native';
 import AppLoading from 'expo-app-loading';
-
+import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons';
 
 // TODO: style this page
@@ -10,8 +10,9 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      };
-      this._cacheResourcesAsync = this._cacheResourcesAsync.bind(this)
+      isReady: false,
+    };
+    this._cacheResourcesAsync = this._cacheResourcesAsync.bind(this)
   }
 
   goToAddContacts = () => {
@@ -21,13 +22,13 @@ class Home extends React.Component {
 
   render() {
       if (!this.state.isReady) {
-          return (
-              <AppLoading
-                  startAsync={this._cacheResourcesAsync}
-                  onFinish={() => this.setState({ isReady: true })}
-                  onError={console.warn}
-              />
-          );
+        return (
+          <AppLoading
+              startAsync={this._cacheResourcesAsync}
+              onFinish={() => this.setState({ isReady: true })}
+              onError={console.warn}
+          />
+        );
       }
 
       return (
