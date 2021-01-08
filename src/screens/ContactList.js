@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { SafeAreaView, View, StyleSheet, FlatList, Text } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import {keyExtractor} from '../../utils';
-
+// TODO: figure out name formatting
+// TODO: style this page
+// TODO: figure out how to select emergency contacts
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +26,7 @@ class ContactList extends React.Component {
   }
 
   renderItem = ({item}) => (
-    <View style={{background: "blue"}}>
+    <View>
       <Text>{item.firstName || item.name}</Text>
       {item.phoneNumbers && <Text>{item.phoneNumbers[0].number}</Text>}
     </View>
