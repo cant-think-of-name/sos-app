@@ -3,6 +3,11 @@ import { SafeAreaView, TouchableOpacity, View, StyleSheet, FlatList, Text } from
 
 import { Ionicons } from '@expo/vector-icons';
 
+import * as SMS from 'expo-sms';
+import SendSMS from 'react-native-sms';
+
+import { retrieveEmergencyContacts } from "../../utils";
+
 // TODO: style this page
 // TODO: figure out how to add an SOS button
 class Home extends React.Component {
@@ -17,16 +22,32 @@ class Home extends React.Component {
     navigation.navigate('Contact List');
   }
 
+  informEmergencyContacts = async () => {
+    const isAvailable = await SMS.isAvailableAsync();
+    if (isAvailable) {
+      const emergencyContactsMap = await retrieveEmergencyContacts();
+      if (emergencyContactsMap.size > 0) {
+        const emergencyContactValues = emergencyContactsMap.values();
+        for (const contact of emergencyContactValues) {
+          console.log(contact)
+          const phoneNumber = contact.phoneNumbers[0].number;
+          const name = contact.name;
+          SMS.sendSMSAsync(phoneNumber, 'Help la');
+        }
+        // const emergencyContacts = emergencyContactsValues.forEach(contact => console.log(contact));
+      }
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>The Home Screen</Text>
         <TouchableOpacity onPress={this.goToAddContacts}>
           <View>
             <Ionicons name="ios-person-add" size={144} color="black" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.helpButton}>
+        <TouchableOpacity onPress={this.informEmergencyContacts} style={styles.helpButton}>
           <Text>SOS</Text>
         </TouchableOpacity>
       </View>

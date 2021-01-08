@@ -12,8 +12,8 @@ const { Map } = require('immutable');
 
 // TODO: figure out name formatting
 // TODO: style this page
-// TODO: figure out how to select emergency contacts
 // TODO: add error messages when saving fails (maybe as a toast)?
+// TODO: this page lags after clicking on some buttons, any way to optimise this?
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
@@ -57,8 +57,6 @@ class ContactList extends React.Component {
 
   storeEmergencyContacts = async () => {
     await saveEmergencyContacts(this.state.selectedContacts);
-    const { navigation } = this.props;
-    navigation.navigate('Home');
   }
 
   render() {
