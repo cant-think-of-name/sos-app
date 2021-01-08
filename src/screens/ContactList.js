@@ -57,6 +57,8 @@ class ContactList extends React.Component {
 
   storeEmergencyContacts = async () => {
     await saveEmergencyContacts(this.state.selectedContacts);
+    const { navigation } = this.props;
+    navigation.navigate('Home');
   }
 
   render() {
