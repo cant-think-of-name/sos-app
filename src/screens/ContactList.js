@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, View, StyleSheet, FlatList, Text } from 'react-native';
+import { SafeAreaView, TouchableOpacity, View, StyleSheet, FlatList, Text } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import { Ionicons } from '@expo/vector-icons'; 
 import CheckBox from '@react-native-community/checkbox';
@@ -42,13 +42,17 @@ class ContactList extends React.Component {
     const { contacts } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Contacts Module Example</Text>
+        <Text>Select Emergency Contacts</Text>
         <FlatList
-          // numColumns={2}
           data={contacts}
           renderItem={this.renderItem}
           keyExtractor={keyExtractor}
         />
+        <TouchableOpacity
+          style={styles.button}
+        >
+          <Text>Submit</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     )
   }
@@ -63,6 +67,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
   },
+  button: {
+    backgroundColor: "lightblue",
+    padding: 20,
+    borderRadius: 30,
+    alignItems: "center",
+  }
 }); 
 
 export default ContactList;
