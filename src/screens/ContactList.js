@@ -1,47 +1,80 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, View, StyleSheet, FlatList, Text } from 'react-native';
+import { SafeAreaView, TouchableOpacity, View, StyleSheet, FlatList, Text } from 'react-native';
+
 import * as Contacts from 'expo-contacts';
-import {keyExtractor} from '../../utils';
+import { Ionicons } from '@expo/vector-icons'; 
+import CheckBox from '@react-native-community/checkbox';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { keyExtractor, retrieveEmergencyContacts, saveEmergencyContacts } from '../../utils';
+
+const { Map } = require('immutable');
+
 // TODO: figure out name formatting
 // TODO: style this page
 // TODO: figure out how to select emergency contacts
+// TODO: add error messages when saving fails (maybe as a toast)?
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       contacts: [],
+      selectedContacts: Map(),
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status === 'granted') {
         const { data: contacts } = await Contacts.getContactsAsync({
           fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
         });
-        this.setState({contacts});
+        const selectedContacts = await retrieveEmergencyContacts();
+        this.setState({selectedContacts, contacts});
       }
     })();
   }
 
   renderItem = ({item}) => (
-    <View>
-      <Text>{item.firstName || item.name}</Text>
-      {item.phoneNumbers && <Text>{item.phoneNumbers[0].number}</Text>}
+    <View style={styles.contactsContainer}>
+      <CheckBox 
+        value={this.state.selectedContacts.has(item.id)}
+        onChange={() => {
+          this.setState(() => ({
+            selectedContacts: this.state.selectedContacts.has(item.id) 
+              ? this.state.selectedContacts.remove(item.id) 
+              : this.state.selectedContacts.set(item.id, item)
+          }));
+        }} />
+      <Ionicons name="person-circle-sharp" style={styles.contactAvatar} size={24} color="black" />
+      <View style={styles.contactDetails}>
+        <Text>{item.firstName || item.name}</Text>
+        {item.phoneNumbers && <Text>{item.phoneNumbers[0].number}</Text>}
+      </View>
     </View>
   )
+
+  storeEmergencyContacts = async () => {
+    await saveEmergencyContacts(this.state.selectedContacts);
+  }
 
   render() {
     const { contacts } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Contacts Module Example</Text>
+        <Text>Select Emergency Contacts</Text>
         <FlatList
           data={contacts}
           renderItem={this.renderItem}
           keyExtractor={keyExtractor}
         />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.storeEmergencyContacts}
+        >
+          <Text>Submit</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     )
   }
@@ -51,6 +84,20 @@ const styles = StyleSheet.create({
   container: {
     'flex': 1,
   },
+  contactsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 10,
+  },
+  contactAvatar: {
+    padding: 10,
+  },
+  button: {
+    backgroundColor: "lightblue",
+    padding: 20,
+    borderRadius: 30,
+    alignItems: "center",
+  }
 }); 
 
 export default ContactList;
