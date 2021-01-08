@@ -10,6 +10,7 @@ import { retrieveEmergencyContacts } from "../../utils";
 
 // TODO: style this page
 // TODO: figure out how to add an SOS button
+// TODO: try this package: https://github.com/briankabiro/react-native-get-sms-android
 class Home extends React.Component {
   constructor(props) {
     super(props);
