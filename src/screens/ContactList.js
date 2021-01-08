@@ -12,6 +12,7 @@ class ContactList extends React.Component {
     super(props);
     this.state = {
       contacts: [],
+      selectedContacts: {},
     };
   }
 
@@ -29,8 +30,17 @@ class ContactList extends React.Component {
 
   renderItem = ({item}) => (
     <View style={styles.contactsContainer}>
-      <CheckBox />
-      <Ionicons name="person-circle-sharp" style={{padding: 10}} size={24} color="black" />
+      <CheckBox 
+        value={Boolean(this.state.selectedContacts[item.id])}
+        onChange={() => {
+          this.setState(() => ({
+            selectedContacts: {
+              ...this.state.selectedContacts,
+              [item.id]: !Boolean(this.state.selectedContacts[item.id]),
+            }
+          }));
+        }} />
+      <Ionicons name="person-circle-sharp" style={styles.contactAvatar} size={24} color="black" />
       <View style={styles.contactDetails}>
         <Text>{item.firstName || item.name}</Text>
         {item.phoneNumbers && <Text>{item.phoneNumbers[0].number}</Text>}
@@ -65,6 +75,9 @@ const styles = StyleSheet.create({
   contactsContainer: {
     display: 'flex',
     flexDirection: 'row',
+    padding: 10,
+  },
+  contactAvatar: {
     padding: 10,
   },
   button: {
