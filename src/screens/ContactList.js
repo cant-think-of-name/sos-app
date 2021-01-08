@@ -4,6 +4,8 @@ import * as Contacts from 'expo-contacts';
 import { Ionicons } from '@expo/vector-icons'; 
 import CheckBox from '@react-native-community/checkbox';
 import {keyExtractor} from '../../utils';
+
+const { Set } = require('immutable');
 // TODO: figure out name formatting
 // TODO: style this page
 // TODO: figure out how to select emergency contacts
@@ -12,7 +14,7 @@ class ContactList extends React.Component {
     super(props);
     this.state = {
       contacts: [],
-      selectedContacts: {},
+      selectedContacts: Set(),
     };
   }
 
@@ -31,13 +33,10 @@ class ContactList extends React.Component {
   renderItem = ({item}) => (
     <View style={styles.contactsContainer}>
       <CheckBox 
-        value={Boolean(this.state.selectedContacts[item.id])}
+        value={Boolean(this.state.selectedContacts.has(item.id))}
         onChange={() => {
           this.setState(() => ({
-            selectedContacts: {
-              ...this.state.selectedContacts,
-              [item.id]: !Boolean(this.state.selectedContacts[item.id]),
-            }
+            selectedContacts: this.state.selectedContacts.has(item.id) ? this.state.selectedContacts.remove(item.id) : this.state.selectedContacts.add(item.id)
           }));
         }} />
       <Ionicons name="person-circle-sharp" style={styles.contactAvatar} size={24} color="black" />
