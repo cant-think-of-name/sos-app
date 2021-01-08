@@ -42,7 +42,9 @@ class ContactList extends React.Component {
         value={this.state.selectedContacts.has(item.id)}
         onChange={() => {
           this.setState(() => ({
-            selectedContacts: this.state.selectedContacts.has(item.id) ? this.state.selectedContacts.remove(item.id) : this.state.selectedContacts.set(item.id, item)
+            selectedContacts: this.state.selectedContacts.has(item.id) 
+              ? this.state.selectedContacts.remove(item.id) 
+              : this.state.selectedContacts.set(item.id, item)
           }));
         }} />
       <Ionicons name="person-circle-sharp" style={styles.contactAvatar} size={24} color="black" />
