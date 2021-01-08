@@ -29,10 +29,19 @@ class Home extends React.Component {
       if (emergencyContactsMap.size > 0) {
         const emergencyContactValues = emergencyContactsMap.values();
         for (const contact of emergencyContactValues) {
-          console.log(contact)
           const phoneNumber = contact.phoneNumbers[0].number;
           const name = contact.name;
-          SMS.sendSMSAsync(phoneNumber, 'Help la');
+          // SMS.sendSMSAsync(phoneNumber, 'Help la');
+          SendSMS.send({
+            body: `Hi ${name}, I'm testing the sos app`,
+            recipients: [phoneNumber],
+            successTypes: ['sent'],
+          },
+          (completed,cancelled,error) => {
+            if (error) {
+              console.log(error)
+            }
+          })
         }
         // const emergencyContacts = emergencyContactsValues.forEach(contact => console.log(contact));
       }
