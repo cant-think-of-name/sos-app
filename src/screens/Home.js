@@ -20,14 +20,14 @@ class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>The Home Screen</Text>
+        <Text>Add your emergency contacts below</Text>
         <TouchableOpacity onPress={this.goToAddContacts}>
           <View>
             <Ionicons name="ios-person-add" size={144} color="black" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.helpButton}>
-          <Text>SOS</Text>
+          <Text >SOS</Text>
         </TouchableOpacity>
       </View>
     )
@@ -42,11 +42,13 @@ const styles = StyleSheet.create({
   },
   helpButton: {
     backgroundColor: "lightblue",
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 200,
+    height: 200,
+    borderRadius: 200,
     alignItems: "center",
     justifyContent: 'center',
+    position: 'absolute',
+    bottom:0,
   },
 }); 
 
