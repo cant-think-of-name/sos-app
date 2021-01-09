@@ -63,7 +63,6 @@ class ContactList extends React.Component {
     const { contacts } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Select Emergency Contacts</Text>
         <FlatList
           data={contacts}
           renderItem={this.renderItem}
