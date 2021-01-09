@@ -3,7 +3,6 @@ import { SafeAreaView, TouchableOpacity, View, StyleSheet, FlatList, Text } from
 
 import { Ionicons } from '@expo/vector-icons';
 
-import * as SMS from 'expo-sms';
 import SendSMS from 'react-native-sms';
 
 import { retrieveEmergencyContacts } from "../../utils";
