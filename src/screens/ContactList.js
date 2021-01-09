@@ -10,10 +10,6 @@ import { keyExtractor, retrieveEmergencyContacts, saveEmergencyContacts } from '
 
 const { Map } = require('immutable');
 
-// TODO: figure out name formatting
-// TODO: style this page
-// TODO: figure out how to select emergency contacts
-// TODO: add error messages when saving fails (maybe as a toast)?
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
@@ -57,15 +53,12 @@ class ContactList extends React.Component {
 
   storeEmergencyContacts = async () => {
     await saveEmergencyContacts(this.state.selectedContacts);
-    const { navigation } = this.props;
-    navigation.navigate('Home');
   }
 
   render() {
     const { contacts } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Select Emergency Contacts</Text>
         <FlatList
           data={contacts}
           renderItem={this.renderItem}

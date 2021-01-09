@@ -4,12 +4,17 @@ import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons';
 
-// TODO: figure out why splash screen is not showing. Apploading works so it's probably the issue with splash2.jpeg?
+import SmsAndroid from 'react-native-get-sms-android';
+
+import Toast from 'react-native-toast-message';
+
+import { retrieveEmergencyContacts } from "../../utils";
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isReady: false,
+      error: 'Error Message here',
     };
     this._cacheResourcesAsync = this._cacheResourcesAsync.bind(this)
   }
@@ -19,39 +24,54 @@ class Home extends React.Component {
     navigation.navigate('Contact List');
   }
 
-  render() {
-      if (!this.state.isReady) {
-        return (
-          <AppLoading
-              startAsync={this._cacheResourcesAsync}
-              onFinish={() => this.setState({ isReady: true })}
-              onError={console.warn}
-          />
-        );
+  informEmergencyContacts = async () => {
+    const isAvailable = await SMS.isAvailableAsync();
+    if (isAvailable) {
+      const emergencyContactsMap = await retrieveEmergencyContacts();
+      if (emergencyContactsMap.size > 0) {
+        const emergencyContactValues = emergencyContactsMap.values();
+        for (const contact of emergencyContactValues) {
+          const phoneNumber = contact.phoneNumbers[0].number;
+          const name = contact.name;
+          SmsAndroid.autoSend(
+            phoneNumber, 
+            `Hi ${name}, I'm testing the emergency contacts hack`,
+            (error) => {
+              this.setState({error: JSON.stringify(error)});
+              Toast.show({
+                type: 'error',
+                position: 'bottom',
+                text1: 'Error',
+                text2: JSON.stringify(error),
+              })
+            },
+            (success) => {
+              Toast.show({
+                type: 'success',
+                position: 'bottom',
+                text1: 'Success',
+                text2: 'Emergency message sent',
+              })
+            }
+          );
+        }
       }
-
-      return (
-        <View style={styles.container}>
-          <Text>Add your emergency contacts below</Text>
-          <TouchableOpacity onPress={this.goToAddContacts}>
-            <View>
-              <Ionicons name="ios-person-add" size={144} color="black" />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.helpButton}>
-            <Text>SOS</Text>
-          </TouchableOpacity>
-        </View>
-      )
+    }
   }
 
-  async _cacheResourcesAsync() {
-      const images = [require('../../assets/splash2.jpeg')];
-
-      const cacheImages = images.map(image => {
-          return Asset.fromModule(image).downloadAsync();
-      });
-      return Promise.all(cacheImages);
+  render() {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity onPress={this.goToAddContacts}>
+          <View>
+            <Ionicons name="ios-person-add" size={144} color="black" />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.informEmergencyContacts} style={styles.helpButton}>
+          <Text>SOS</Text>
+        </TouchableOpacity>
+      </View>
+    )
   }
 
 }
