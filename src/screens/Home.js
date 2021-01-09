@@ -9,7 +9,6 @@ import Toast from 'react-native-toast-message';
 
 import { retrieveEmergencyContacts } from "../../utils";
 
-// TODO: try this package: https://github.com/briankabiro/react-native-get-sms-android
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -49,7 +48,7 @@ class Home extends React.Component {
               Toast.show({
                 type: 'error',
                 position: 'bottom',
-                text1: JSON.stringify(error),
+                text1: 'Error',
                 text2: JSON.stringify(error),
               })
             },
@@ -63,7 +62,6 @@ class Home extends React.Component {
             }
           );
         }
-        // const emergencyContacts = emergencyContactsValues.forEach(contact => console.log(contact));
       }
     }
   }

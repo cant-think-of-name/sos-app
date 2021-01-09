@@ -10,10 +10,6 @@ import { keyExtractor, retrieveEmergencyContacts, saveEmergencyContacts } from '
 
 const { Map } = require('immutable');
 
-// TODO: figure out name formatting
-// TODO: style this page
-// TODO: add error messages when saving fails (maybe as a toast)?
-// TODO: this page lags after clicking on some buttons, any way to optimise this?
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
