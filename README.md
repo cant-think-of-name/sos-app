@@ -35,3 +35,7 @@ Clone this repo: `https://github.com/cant-think-of-name/sos-app.git`
 To start the project: `expo start`
 
 It will open up the Metro Bundler, where you will see a QR code. Scan the QR code with the Expo mobile app to test the app on your device.
+
+## Progress
+
+While this app is able to retrieve a list of contacts, it's not able to send an SMS to emergency contacts yet.

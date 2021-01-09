@@ -22,15 +22,6 @@ class Home extends React.Component {
     navigation.navigate('Contact List');
   }
 
-  errorMessage = (error) => {
-    this.setState({error: JSON.stringify(error)});
-    Toast.show({
-      type: 'error',
-      position: 'bottom',
-      text1: JSON.stringify(error),
-    })
-  }
-
   informEmergencyContacts = async () => {
     const isAvailable = await SMS.isAvailableAsync();
     if (isAvailable) {
@@ -77,7 +68,6 @@ class Home extends React.Component {
         <TouchableOpacity onPress={this.informEmergencyContacts} style={styles.helpButton}>
           <Text>SOS</Text>
         </TouchableOpacity>
-        <Text>{this.state.error}</Text>
       </View>
     )
   }
