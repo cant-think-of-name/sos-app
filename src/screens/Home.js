@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import SmsAndroid from 'react-native-get-sms-android';
 
+import Toast from 'react-native-toast-message';
+
 import { retrieveEmergencyContacts } from "../../utils";
 
 // TODO: try this package: https://github.com/briankabiro/react-native-get-sms-android
@@ -12,12 +14,22 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      error: 'Error Message here',
     };
   }
 
   goToAddContacts = () => {
     const { navigation } = this.props;
     navigation.navigate('Contact List');
+  }
+
+  errorMessage = (error) => {
+    this.setState({error: JSON.stringify(error)});
+    Toast.show({
+      type: 'error',
+      position: 'bottom',
+      text1: JSON.stringify(error),
+    })
   }
 
   informEmergencyContacts = async () => {
@@ -29,21 +41,27 @@ class Home extends React.Component {
         for (const contact of emergencyContactValues) {
           const phoneNumber = contact.phoneNumbers[0].number;
           const name = contact.name;
-          // SMS.sendSMSAsync(phoneNumber, 'Help la');
-          SendSMS.send({
-            body: `Hi ${name}, I'm testing the sos app`,
-            recipients: [phoneNumber],
-            successTypes: ['sent', 'queued'],
-            allowAndroidSendWithoutReadPermission: true
-          },
-          (completed,cancelled,error) => {
-            if (cancelled) {
-              console.log('is cancelled lol')
+          SmsAndroid.autoSend(
+            phoneNumber, 
+            `Hi ${name}, I'm testing the emergency contacts hack`,
+            (error) => {
+              this.setState({error: JSON.stringify(error)});
+              Toast.show({
+                type: 'error',
+                position: 'bottom',
+                text1: JSON.stringify(error),
+                text2: JSON.stringify(error),
+              })
+            },
+            (success) => {
+              Toast.show({
+                type: 'success',
+                position: 'bottom',
+                text1: 'Success',
+                text2: 'Emergency message sent',
+              })
             }
-            if (error) {
-              console.log(error)
-            }
-          })
+          );
         }
         // const emergencyContacts = emergencyContactsValues.forEach(contact => console.log(contact));
       }
@@ -61,6 +79,7 @@ class Home extends React.Component {
         <TouchableOpacity onPress={this.informEmergencyContacts} style={styles.helpButton}>
           <Text>SOS</Text>
         </TouchableOpacity>
+        <Text>{this.state.error}</Text>
       </View>
     )
   }
