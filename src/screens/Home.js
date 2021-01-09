@@ -3,12 +3,10 @@ import { SafeAreaView, TouchableOpacity, View, StyleSheet, FlatList, Text } from
 
 import { Ionicons } from '@expo/vector-icons';
 
-import SendSMS from 'react-native-sms';
+import SmsAndroid from 'react-native-get-sms-android';
 
 import { retrieveEmergencyContacts } from "../../utils";
 
-// TODO: style this page
-// TODO: figure out how to add an SOS button
 // TODO: try this package: https://github.com/briankabiro/react-native-get-sms-android
 class Home extends React.Component {
   constructor(props) {
